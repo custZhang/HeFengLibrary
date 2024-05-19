@@ -1,21 +1,22 @@
-package com.zsp.hefengLibrary.model.entity;
+package com.zsp.hefengLibrary.model.dto.book;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.zsp.hefengLibrary.common.PageRequest;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 图书
  * @TableName book
  */
-@TableName(value ="book")
 @Data
-public class Book implements Serializable {
+public class BookQueryRequest extends PageRequest implements Serializable{
     /**
      * id
      */
@@ -61,11 +62,6 @@ public class Book implements Serializable {
      * 分类
      */
     private String category;
-
-    /**
-     * 状态0正常，1缺货，2下架
-     */
-    private Integer status;
 
     /**
      * 是否删除

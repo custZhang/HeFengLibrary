@@ -1,13 +1,16 @@
-package com.zsp.hefengLibrary.model.entity;
+package com.zsp.hefengLibrary.model.vo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.zsp.hefengLibrary.model.entity.Book;
+import lombok.Data;
+import org.springframework.beans.BeanUtils;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 图书
@@ -15,7 +18,7 @@ import lombok.Data;
  */
 @TableName(value ="book")
 @Data
-public class Book implements Serializable {
+public class BookEditVO implements Serializable {
     /**
      * id
      */
@@ -63,14 +66,34 @@ public class Book implements Serializable {
     private String category;
 
     /**
-     * 状态0正常，1缺货，2下架
+     * 包装类转对象
+     *
+     * @param BookVO
+     * @return
      */
-    private Integer status;
+    public static Book voToObj(BookEditVO BookVO) {
+        if (BookVO == null) {
+            return null;
+        }
+        Book book = new Book();
+        BeanUtils.copyProperties(BookVO, book);
+        return book;
+    }
 
     /**
-     * 是否删除
+     * 对象转包装类
+     *
+     * @param Book
+     * @return
      */
-    private Integer isDelete;
+    public static BookEditVO objToVo(Book Book) {
+        if (Book == null) {
+            return null;
+        }
+        BookEditVO bookVO = new BookEditVO();
+        BeanUtils.copyProperties(Book, bookVO);
+        return bookVO;
+    }
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

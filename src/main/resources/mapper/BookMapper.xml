@@ -14,6 +14,7 @@
             <result property="price" column="price" jdbcType="DECIMAL"/>
             <result property="quantity" column="quantity" jdbcType="INTEGER"/>
             <result property="category" column="category" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
@@ -21,6 +22,6 @@
         id,title,author,
         publisher,isbn,publishDate,
         price,quantity,category,
-        isDelete
+        status,isDelete
     </sql>
 </mapper>
