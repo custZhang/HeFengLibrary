@@ -71,7 +71,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book>
         queryWrapper.like(StringUtils.isNotBlank(author), "author", author);
         queryWrapper.like(StringUtils.isNotBlank(publisher), "publisher", publisher);
 
-        queryWrapper.like(StringUtils.isNotBlank(isbn), "isbn", isbn);
+//        queryWrapper.like(StringUtils.isNotBlank(isbn), "isbn", isbn);
         queryWrapper.like(StringUtils.isNotBlank(category), "category", category);
 
 //        queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);

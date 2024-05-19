@@ -14,11 +14,16 @@ import com.zsp.hefengLibrary.model.dto.book.BookAddRequest;
 import com.zsp.hefengLibrary.model.dto.book.BookEditRequest;
 import com.zsp.hefengLibrary.model.dto.book.BookQueryRequest;
 import com.zsp.hefengLibrary.model.dto.book.BookUpdateRequest;
+import com.zsp.hefengLibrary.model.dto.borrow.BorrowAddRequest;
+import com.zsp.hefengLibrary.model.dto.borrow.BorrowQueryRequest;
 import com.zsp.hefengLibrary.model.entity.Book;
+import com.zsp.hefengLibrary.model.entity.Borrow;
 import com.zsp.hefengLibrary.model.entity.User;
 import com.zsp.hefengLibrary.model.vo.BookEditVO;
 import com.zsp.hefengLibrary.model.vo.BookVO;
+import com.zsp.hefengLibrary.model.vo.BorrowVO;
 import com.zsp.hefengLibrary.service.BookService;
+import com.zsp.hefengLibrary.service.BorrowService;
 import com.zsp.hefengLibrary.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -35,8 +42,8 @@ public class BookController {
     @Resource
     private BookService bookService;
 
-//    @Resource
-//    private BookSubmitService bookSubmitService;
+    @Resource
+    private BorrowService borrowService;
 
     @Resource
     private UserService userService;
@@ -247,45 +254,60 @@ public class BookController {
     }
 
 
+    /**
+     * 提交题目
+     *
+     * @param borrowAddRequest
+     * @param request
+     * @return 提交记录的id
+     */
+    @PostMapping("/borrow/do")
+    public BaseResponse<Long> doBorrow(@RequestBody BorrowAddRequest borrowAddRequest,
+                                               HttpServletRequest request) {
+        if (borrowAddRequest == null || borrowAddRequest.getBookId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 登录才能点赞
+        final User loginUser = userService.getLoginUser(request);
+        long bookId = borrowAddRequest.getBookId();
+        long bookSubmitId = borrowService.doBorrow(borrowAddRequest, loginUser);
+        return ResultUtils.success(bookSubmitId);
+    }
 
+    /**
+     * 分页获取题目提交列表（非管理员的普通用户，只能看到非答案、提交代码等公开信息）
+     *
+     * @param borrowQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/borrow/list/page")
+    public BaseResponse<Page<BorrowVO>> listBorrowByPage(@RequestBody BorrowQueryRequest borrowQueryRequest,
+                                                         HttpServletRequest request) {
+        long current = borrowQueryRequest.getCurrent();
+        long size = borrowQueryRequest.getPageSize();
+        Page<Borrow> borrowPage = borrowService.page(new Page<>(current, size),
+                borrowService.getQueryWrapper(borrowQueryRequest));
+        //脱敏
+        final User loginUser = userService.getLoginUser(request);
+        return ResultUtils.success(borrowService.getBorrowVOPage(borrowPage,loginUser));
+    }
 
-
-//    /**
-//     * 提交题目
-//     *
-//     * @param bookSubmitAddRequest
-//     * @param request
-//     * @return 提交记录的id
-//     */
-//    @PostMapping("/book_submit/do")
-//    public BaseResponse<Long> doBookSubmit(@RequestBody BookSubmitAddRequest bookSubmitAddRequest,
-//                                               HttpServletRequest request) {
-//        if (bookSubmitAddRequest == null || bookSubmitAddRequest.getBookId() <= 0) {
-//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-//        }
-//        // 登录才能点赞
-//        final User loginUser = userService.getLoginUser(request);
-//        long bookId = bookSubmitAddRequest.getBookId();
-//        long bookSubmitId = bookSubmitService.doBookSubmit(bookSubmitAddRequest, loginUser);
-//        return ResultUtils.success(bookSubmitId);
-//    }
-//
-//    /**
-//     * 分页获取题目提交列表（非管理员的普通用户，只能看到非答案、提交代码等公开信息）
-//     *
-//     * @param bookSubmitQueryRequest
-//     * @param request
-//     * @return
-//     */
-//    @PostMapping("/book_submit/list/page")
-//    public BaseResponse<Page<BookSubmitVO>> listBookSubmitByPage(@RequestBody BookSubmitQueryRequest bookSubmitQueryRequest,
-//                                                                         HttpServletRequest request) {
-//        long current = bookSubmitQueryRequest.getCurrent();
-//        long size = bookSubmitQueryRequest.getPageSize();
-//        Page<BookSubmit> bookSubmitPage = bookSubmitService.page(new Page<>(current, size),
-//                bookSubmitService.getQueryWrapper(bookSubmitQueryRequest));
-//        //脱敏
-//        final User loginUser = userService.getLoginUser(request);
-//        return ResultUtils.success(bookSubmitService.getBookSubmitVOPage(bookSubmitPage,loginUser));
-//    }
+    /**
+     * 归还图书
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping("/borrow/return")
+    public BaseResponse<Boolean> returnBook(long id, HttpServletRequest request) {
+        Borrow borrow = borrowService.getById(id);
+        borrow.setIsReturned(1);
+        borrow.setReturnDate(new Date());
+        // 判断是否存在
+        Borrow oldBorrow = borrowService.getById(id);
+        ThrowUtils.throwIf(oldBorrow == null, ErrorCode.NOT_FOUND_ERROR);
+        boolean result = borrowService.updateById(borrow);
+        return ResultUtils.success(result);
+    }
 }
