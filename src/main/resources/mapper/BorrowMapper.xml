@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsp.hefengLibrary.mapper.BorrowMapper">
+
+    <resultMap id="BaseResultMap" type="com.zsp.hefengLibrary.model.entity.Borrow">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="bookId" column="bookId" jdbcType="BIGINT"/>
+            <result property="borrowDate" column="borrowDate" jdbcType="TIMESTAMP"/>
+            <result property="returnDate" column="returnDate" jdbcType="TIMESTAMP"/>
+            <result property="isReturned" column="isReturned" jdbcType="TINYINT"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,userId,bookId,
+        borrowDate,returnDate,isReturned,
+        isDelete
+    </sql>
+</mapper>
