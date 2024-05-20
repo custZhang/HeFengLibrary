@@ -99,8 +99,8 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow>
         String sortField = borrowQueryRequest.getSortField();
         String sortOrder = borrowQueryRequest.getSortOrder();
 
-        boolean userIdNotNull = (userId != 0 && ObjectUtils.isNotEmpty(userId));
-        boolean bookIdNotNull = (bookId != 0 && ObjectUtils.isNotEmpty(bookId));
+        boolean userIdNotNull = (ObjectUtils.isNotEmpty(userId) && userId != 0);
+        boolean bookIdNotNull = (ObjectUtils.isNotEmpty(bookId) && bookId != 0);
 
         // 拼接查询条件
         queryWrapper.eq(userIdNotNull, "userId", userId);

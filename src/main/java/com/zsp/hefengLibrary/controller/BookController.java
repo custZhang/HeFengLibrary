@@ -243,7 +243,7 @@ public class BookController {
      * @return
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+//    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<Book>> listBookByPage(@RequestBody BookQueryRequest bookQueryRequest,
                                                            HttpServletRequest request) {
         long current = bookQueryRequest.getCurrent();
@@ -270,6 +270,17 @@ public class BookController {
         // 登录才能点赞
         final User loginUser = userService.getLoginUser(request);
         long bookId = borrowAddRequest.getBookId();
+        //book表库存+1
+        Book book = bookService.getById(bookId);
+        if(book.getQuantity() <= 0  || book.getStatus() == 2){//校验库存是否充足
+            throw new BusinessException(ErrorCode.OPERATION_ERROR);//库存不足
+        }
+        book.setQuantity(book.getQuantity() - 1);
+        if(book.getQuantity() <= 0  && book.getStatus() != 2){
+            book.setStatus(1);//设置为库存不足
+        }
+        bookService.updateById(book);
+        //生成borrow记录
         long bookSubmitId = borrowService.doBorrow(borrowAddRequest, loginUser);
         return ResultUtils.success(bookSubmitId);
     }
@@ -304,10 +315,18 @@ public class BookController {
         Borrow borrow = borrowService.getById(id);
         borrow.setIsReturned(1);
         borrow.setReturnDate(new Date());
+        //book表库存+1
+        Long bookId = borrow.getBookId();
+        Book book = bookService.getById(bookId);
+        book.setQuantity(book.getQuantity() + 1);
+        if(book.getQuantity() >= 0 && book.getStatus() != 2){//下架状态，也不能设置为库存充足
+            book.setStatus(0);//设置为库存充足
+        }
+        boolean resultBook = bookService.updateById(book);
         // 判断是否存在
         Borrow oldBorrow = borrowService.getById(id);
         ThrowUtils.throwIf(oldBorrow == null, ErrorCode.NOT_FOUND_ERROR);
-        boolean result = borrowService.updateById(borrow);
-        return ResultUtils.success(result);
+        boolean resultBorrow = borrowService.updateById(borrow);
+        return ResultUtils.success(resultBook && resultBorrow);
     }
 }
