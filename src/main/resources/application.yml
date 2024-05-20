@@ -22,8 +22,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/library
-    username: root
-    password: zsp
+    username: your_username
+    password: your_password
 #  jackson:
 #    time-zone: Asia/Shanghai
   # Redis 配置
