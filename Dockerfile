@@ -11,7 +11,7 @@ WORKDIR /app
 ADD target/HeFengLibrary-0.0.1-SNAPSHOT.jar .
 
 # 暴露端口
-EXPOSE 8101
+EXPOSE 8201
 
 # 启动命令
 ENTRYPOINT ["java","-jar","/app/HeFengLibrary-0.0.1-SNAPSHOT.jar","--spring.profiles.active=prod"]
