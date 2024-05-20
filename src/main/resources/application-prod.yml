@@ -4,9 +4,6 @@
 spring:
   application:
     name: HeFengLibrary
-  # 默认 dev 环境
-  profiles:
-    active: dev
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -21,24 +18,11 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.134.249.222:3306/library
+    url: jdbc:mysql://localhost:3306/library
     username: root
     password: zsp
 #  jackson:
 #    time-zone: Asia/Shanghai
-  # Redis 配置
-  # todo 需替换配置，然后取消注释
-#  redis:
-#    database: 1
-#    host: localhost
-#    port: 6379
-#    timeout: 5000
-#    password: 123456
-#  # 文件上传
-#  servlet:
-#    multipart:
-#      # 大小限制
-#      max-file-size: 10MB
 server:
   address: 0.0.0.0
   port: 8201
