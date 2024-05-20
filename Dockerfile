@@ -8,7 +8,7 @@ ENV TZ=Asia/Shanghai
 WORKDIR /app
 
 # 将 jar 包添加到工作目录，比如 target/yuoj-backend-user-service-0.0.1-SNAPSHOT.jar
-ADD target/zspoj-backend-0.0.1-SNAPSHOT.jar .
+ADD target/HeFengLibrary-0.0.1-SNAPSHOT.jar .
 
 # 暴露端口
 EXPOSE 8101

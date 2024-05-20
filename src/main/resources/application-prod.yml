@@ -21,7 +21,7 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/library
+    url: jdbc:mysql://8.134.249.222:3306/library
     username: root
     password: zsp
 #  jackson:
