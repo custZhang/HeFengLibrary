@@ -1,6 +1,6 @@
 ### 项目体验
 上线地址：[https://library.zsp2024.cn](https://library.zsp2024.cn)，点击右上角登录后，使用默认的账号密码登录后，即可使用所有功能。
-![](https://cdn.nlark.com/yuque/0/2024/png/43145378/1716212693524-c004e620-771b-48c4-8162-da6791b1eef6.png?x-oss-process=image%2Fformat%2Cwebp%2Fresize%2Cw_1125%2Climit_0#averageHue=%23fdfdfd&from=url&id=om5Jd&originHeight=673&originWidth=1125&originalType=binary&ratio=1.5&rotation=0&showTitle=false&status=done&style=none&title=)
+![image.png](https://cdn.nlark.com/yuque/0/2024/png/43145378/1716215227262-01a53009-96c4-4bb8-9d7c-2cb211aaae2a.png#averageHue=%23fefdfd&clientId=u799b9a95-36ba-4&from=paste&height=739&id=uab707bdf&originHeight=1109&originWidth=2240&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=139192&status=done&style=none&taskId=uae63b3f4-94cc-4102-b0d2-1fe7f31e4f8&title=&width=1493.3333333333333)
 ### 项目介绍
 该项目是“图书馆管理系统”，管理员可以添加、修改、下架图书，普通用户可以借阅、归还图书。
 该仓库代码只是后端代码，技术选型SpringBoot、MyBatis-Plus、MySQL，**需要配合前端代码使用：**[**https://github.com/custZhang/HeFengLibrary-frontend**](https://github.com/custZhang/HeFengLibrary-frontend)
